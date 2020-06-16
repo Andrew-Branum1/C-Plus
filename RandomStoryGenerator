@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+/* run this program using the console pauser or add your own getch, system("pause") or input loop */
+/*
+Author: Drew Branum
+Date: 2/10/2020
+Purpose: To create a basic random story 
+Lab Section: 02
+*/
+int main(int argc, char *argv[]) {//main
+	srand(time(NULL));//initialized random number generator based off of time
+	int s = rand() % 6;
+	int r = rand() % 6;
+	
+	char name[20];
+	int age;
+	
+	char *pets[6]={"dog","cat","fish","lizard","snake","mouse"};//intialized arrays in which are selected at random
+	char *sports[6]={"football","lacrosse","soccer","baseball","swimming","basketball"};
+	char *colors[6]={"blue","red","green","yellow","purple","orange"};
+	char *eyes[6]={"hazel","blue","green","black","brown","red"};
+	char *states[6]= {"Ohio", "Kentucky", "California", "Oregon", "Georgia", "Maine"};
+
+ 
+
+	printf("Hello, please enter your first name.\n");
+	scanf("%s", name);
+	printf("Enter your age (Intergers only).\n");
+	scanf("%d", &age);
+
+	printf("%s is a %d year old person who lives in the state of %s.\n",name,age,states[s]);
+	printf("One time %s walked into the living room to see his/her %s pet %s out of the cage staring at the TV with its %s eyes.\n",name,colors[s],pets[s],eyes[s]);
+	printf("His/Her other pet %s then attacked %s as soon as he/she walked two more feet into the living room.\n", pets[s], name);
+	printf("At this point %s heard the %s announcer on the TV calling out to him/her to wake up.\n",name, sports[s]);
+	printf("%s then woke up in an instant and realized that his/her %s is still in its cage, but the state on his/her ID changed from %s to %s. \n",name,pets[s],states[s],states[r]);
+	printf("%s was confused and went back to bed... THE END",name);
+	
+	return 0;
+}
