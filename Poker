@@ -1,0 +1,204 @@
+#include <bits/stdc++.h>
+
+/*
+Ceator: Drew Branum
+Made: 4/14/20
+Purpose: Single-player poker game
+*/
+using namespace std;
+
+
+class Poker{// created a Poker classs
+	public:
+		int wager;// initialized intergers
+		int chips;
+		int hands;
+		int win;
+		int loss;
+		
+		Poker(){//constuctor to initilize chips to 100
+			chips = 100;
+			hands = 0;
+			win = 0;
+			loss = 0; 
+			wager = 0;
+		}	
+
+vector<string> Hand(){
+       // incrementing total_hands
+       hands++;
+       // defining a vector cards
+       vector<string> cards;
+       // looping four time to fetch four different cards
+       for(int i=0;i<4;i++){
+           // loop till already present card not generated
+           while(1){
+               // getting randomCard
+               string card=RCard();
+               // condition if card not found
+               if(find(cards.begin(),cards.end(),card) == cards.end()){
+                   // pushing card in hand
+                   cards.push_back(card);
+                   // breaking the loop
+                   break;
+               }
+           }          
+       }
+       // printing cards
+       for(int i=0;i<cards.size();i++){
+           cout<<cards[i]<<" ";
+       }
+       cout<<endl;
+       // returning cards
+       return cards;
+   }
+/*vector<string> hand1(){
+	hands++// incrementing hands by one
+	vector<string> hand_1;//defines vector hand_1
+	for(int i =0;i<4;i++){//loops 4 times for 4 suits
+		while(1){//loops until present card isn't already generated
+			string card = randomCard();//gets random card
+			if(find(hand_1.begin(),hand_1.end(),hand_1)==hand_1.end()){//condition if card isn't found
+				hand_1.push_back(card);//pushes cards back in hand
+				break;
+			}
+		}
+	}
+	for ( int i = 0; i<hand_1.size(), i++){//prints cards
+		cout<< hand_1[i] << " ";
+	}
+	cout << endl;
+	return hand_1;
+}*/
+string RCard(){//function to generate a random card
+	srand(time(NULL));//seed for random number
+	int n = rand()%9 +2;// random number between 2 and 10
+	stringstream its;//converting number to a string
+	its<<n;//generates random suit
+	string suit[4]={"D","S","C","H"};//defines suit array
+	int s = rand() %4;// random number between 0 and 3
+	string rcard = its.str()+suit[s];// adding the strings together
+	return rcard;//returns card
+}
+
+ void checkHand(vector<string> Hand){//function to check type the type of hand
+       // extracting number and suits of card
+       vector<int> number;//initializes number vector
+       vector<char> suit;//initilizes suit vector
+       for(int i=0;i<4;i++){
+           string number_string=Hand[i].substr(0,Hand[i].length()-1);
+           number.push_back(atoi(number_string.c_str()));
+           //cout<<number_string<<" "<<number[i]<<" ";
+           suit.push_back(Hand[i][Hand[i].length()-1]);
+       }
+       // sorting vector number
+       sort(number.begin(), number.end());
+       // condition for flush
+       if(number[0]==number[1] && number[1]==number[2] && number[2]==number[3]){
+           cout<<"Congrats: You got a Four of a kind and have won $400"<<endl;
+           win++;
+           chips+=400;
+       }// now checking for Flush
+       else if(number[0]==number[1]-1 && number[1]==number[2]-1 && number[2]==number[3]-1){
+           // now checking for straight flush
+           if(suit[0]==suit[1] && suit[1]==suit[2] && suit[2]==suit[3]){
+               cout<<"Congrats: You got a Straight Flush and have won $300"<<endl;
+               win++;
+               chips+=300;
+           }
+           else{// only Flush
+               cout<<"Congrats: You got a Flush and have won $250"<<endl;
+               win++;
+               chips+=250;
+           }
+       }// now checking for three of a kind
+       else if((number[0]==number[1] && number[1]==number[2]) ||
+           (number[1]==number[2] && number[2]==number[3])){
+           cout<<"Congrats: You got a Three of a kind and have won $150"<<endl;
+           win++;
+           chips+=150;
+       }// now checking for two pairs
+       else if(number[0]==number[1] && number[2]==number[3]){
+           cout<<"Congrats: You got a Two Pairs and have won $100"<<endl;
+           win++;
+           chips+=100;
+       }// now checking for two of a king
+       else if((number[0]==number[1]) || (number[1]==number[2]) || (number[2]==number[3])){
+           cout<<"Congrats: You got a Two of a kind and have won $1"<<endl;
+           win++;
+           chips+=1;
+       }// else got a Bubkiss
+       else{
+           cout<<"Sorry: You got a Bubkiss and have lost $"<<wager<<endl;
+           //incrementing total_loss
+           loss++;
+           chips-=wager;
+       }
+   }
+};
+
+int main(int argc, char** argv) {
+	
+	
+	
+		
+		cout << "Hello and welcome to my single-player Poker game.\n\n";
+		cout << "Your initial bank roll is $100.00\n\n";
+		cout << "-----------------------------------\n\n";
+		Poker poker;//declares object
+		string start;
+		while(1){
+				cout << "Would you like to play a hand [y/n]?\n\n";
+				cin >> start;
+					if(start == "y"||start == "n"){//checks input
+						cout << "\nGood Luck!\n";
+							break;
+					}	
+				cout << "Invalid input\n";
+					}
+		
+			
+		while(start=="y"){
+		
+			
+			cout<<endl<<"Place your bet [1, "<<poker.chips<<"]: ";
+       
+       cin>>poker.wager;
+       // checking if bet is correct
+       if(poker.wager>poker.chips){
+           cout<<poker.wager<<" Invalid input, the input should be between 1 and "<<poker.chips<<endl;
+           continue;
+       }
+    
+       // showing hand to player
+       cout<<"Shuffling Deck ..."<<endl;
+       cout<<"The cards fall where they may ..."<<endl;
+       // calling method 
+       vector<string> Hand=poker.Hand();
+       // checking hand, calling method checkHand
+       poker.checkHand(Hand);
+       cout<<endl;
+       // checking if chips left are more than 0
+       if(poker.chips<=0){
+           cout<<"Game Over. You're Broke!"<<endl;
+       }
+       // asking for valid input y or n
+       while(1){
+        
+           cout<<"Play a hand [y / n]? ";
+           cin>>start;
+           if(start=="y" || start=="n"){
+               break;//breaks on correct input
+           }
+          
+           cout<<"Invalid input, should be y or n"<<endl;
+       }
+   }
+   
+   cout<<endl<<"------------------------------------------"<<endl;
+   cout<<"Thanks for playing ..."<<endl;
+   cout<<"You played a total of "<<poker.hands<<" hands"<<endl;
+   cout<<"You won "<<poker.win<<endl;
+   cout<<"You lost "<<poker.loss<<endl;
+   cout<<"You won $"<<poker.chips-100;
+}
